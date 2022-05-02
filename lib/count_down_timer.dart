@@ -1,5 +1,5 @@
+import 'package:countdown_widget/countdown_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:timer_count_down/timer_count_down.dart';
 
 class CountdownTimer extends StatelessWidget {
   final Duration duration;
@@ -8,25 +8,36 @@ class CountdownTimer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Countdown(
-      seconds: duration.inSeconds,
-      build: (_, double sec) {
-        var duration = Duration(seconds: sec.toInt());
-        String towDigit(int n) => n.toString().padLeft(2, '0');
-        final days = towDigit(duration.inDays);
-        final hours = towDigit(duration.inHours);
-        final minutes = towDigit(duration.inMinutes.remainder(60));
-        final seconds = towDigit(duration.inSeconds.remainder(60));
-        var time = "$days : $hours : $minutes : $seconds";
-        return Text(time, style: const TextStyle(fontSize: 50));
-      },
-      onFinished: () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Timer is done!'),
+    return CountDownWidget(
+      duration: duration,
+      builder: (_, duration) {
+        var time = formatDuration(duration);
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.circular(5),
+          ),
+          padding: const EdgeInsets.all(5),
+          child: Text(
+            time,
+            style: const TextStyle(fontSize: 30, color: Colors.white),
           ),
         );
       },
     );
   }
+
+  ///ref: https://stackoverflow.com/questions/54775097/formatting-a-duration-like-hhmmss/60904049#60904049
+  String formatDuration(Duration d) {
+    var seconds = d.inSeconds;
+    final days = seconds ~/ Duration.secondsPerDay;
+    seconds -= days * Duration.secondsPerDay;
+    final hours = seconds ~/ Duration.secondsPerHour;
+    seconds -= hours * Duration.secondsPerHour;
+    final minutes = seconds ~/ Duration.secondsPerMinute;
+    seconds -= minutes * Duration.secondsPerMinute;
+    return "${towDigits(days)} : ${towDigits(hours)} : ${towDigits(minutes)} : ${towDigits(seconds)}";
+  }
+
+  String towDigits(int n) => n.toString().padLeft(2, '0');
 }

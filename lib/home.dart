@@ -1,13 +1,8 @@
-import 'packages.dart';
+import './packages.dart';
 
-class Home extends StatefulWidget {
+class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
 
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,9 +10,30 @@ class _HomeState extends State<Home> {
         centerTitle: true,
         title: const Text("Countdown Timer"),
       ),
-      body: const Center(
-        child: CountdownTimer(
-          duration: Duration(days: 1),
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: const [
+            CountdownTimer(
+              duration: Duration(days: 1),
+            ),
+            SizedBox(height: 30),
+            CountdownTimer(
+              duration: Duration(days: 2),
+            ),
+            SizedBox(height: 30),
+            CountdownTimer(
+              duration: Duration(days: 3),
+            ),
+            SizedBox(height: 30),
+            CountdownTimer(
+              duration: Duration(days: 4),
+            ),
+            SizedBox(height: 30),
+            CountdownTimer(
+              duration: Duration(days: 5),
+            ),
+          ],
         ),
       ),
     );
